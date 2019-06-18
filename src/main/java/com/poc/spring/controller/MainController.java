@@ -12,6 +12,10 @@ public class MainController {
 	public String getMethod() { 
 		return "index"; 
 	} 
+	@RequestMapping("/2")
+	public String getMethod2() { 
+		return "index2"; 
+	} 
 	
 	@RequestMapping("/n1ql")
 	public void postMethod1() { 
