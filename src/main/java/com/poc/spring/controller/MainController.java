@@ -19,7 +19,7 @@ public class MainController {
 	
 	@RequestMapping("/n1ql")
 	public void postMethod1() { 
-		System.out.println("test2");
+		System.out.println("test3");
 	} 
 	
 	@RequestMapping(value="/hey", method=RequestMethod.POST) 
