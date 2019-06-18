@@ -5,92 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Couchbase</title>
-<style>
-#header {
-	width: 100%;
-    height: 100px;
-    background-color: #4287d6;
-    display: flex;
-  	justify-content: center;
-    
-}
-
-#header a img{
-	width: 80px;
-    height: 96px;
-}
-
-body{
-	font-size: 14px;
-	font-family: Arial, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0;
-}
-h1 {
-	font-size: 1.4em;
-	margin: 0;
-	font-weight: 100;
-	color: #333;
-	margin-bottom: 8px;
-}
-.layout-wrap{
-	margin:10px 10px 20px;
-	border: 1px dashed #666;
-	padding: 10px;
-}
-.float-frame{
-	background: lightgray;
-	border: 1px solid #ddd;
-	padding: 10px;
-	overflow: hidden;
-	zoom:1;
-}
-.float-unit {
-	color: #fff;
-	font-size: 18px;
-	font-weight: bold;
-	text-align: center;
-	float: left;
-	width: 47%;
-	height: 400px;
-	padding: 15px 0;
-	margin: 0 1px;
-}
-.big-area {
-	float: left;
-	width: 100px;
-	margin: 0 10px 0 0;
-	padding: 10px;
-	background: #999;
-}
-.small-unit {
-	float: left;
-	width: 48px;
-	height: 48px;
-	color: #fff;
-	background: #333;
-	margin: 1px;
-}
-.n1qlexcute{
-	border: none;
-	color: white;
-	padding: 15px 32px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	margin: 4px 2px;
-	cursor: pointer;
-	border-radius: 12px;
-	background-color: #4287d6;
-	transition-duration: 0.4s;
-}
-.n1qlexcute:hover {
-  background-color: #555555; /* Green */
-  color: white;
-}
-textarea{resize:none;}
-</style>
+<link rel="stylesheet" type="text/css" href="/static/css/index.css">
 </head>
 <script>
 </script>
@@ -100,6 +15,29 @@ textarea{resize:none;}
       <img src="/static/image/cb_logo_bug_white_2.svg" alt="Couchbase Server" class="logobug">
     </a>
 </div>
+
+<div class="layout-wrap">
+	<h1>랜덤 데이터 생성</h1>
+	<div class="float-frame">
+		<div class="big-area">
+			<form name="example_input" action="hey" method="post">
+	아이디 사이즈 :	<input type="text" name="docIdSize" size="3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br />
+	문서 사이즈 : 	<input type="text" name="docSize" size="15" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br />
+    생성 할 문서의 수 : <input type="text" name="docCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>건<br /><br />
+	문서 종류 : 	<input type="radio" name="docType" value="Json" /> json
+				<input type="radio" name="docType" value="Binary" /> binary<br /><br />    
+	작업 반복 여부 : <input type="radio" name="loop" value="Ture" /> true
+				<input type="radio" name="loop" value="False" /> false<br /><br />
+	쓰레드 개수 : 	<input type="text" size="3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />	
+				<input type="submit" class="n1qlexcute">
+			</form>
+		</div>
+		<!-- //small-area -->
+	</div>
+	<!-- //float-frame -->
+</div>
+
+<!-- //layout-wrap -->
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:53%">N1QL 실행창</h1>
@@ -118,29 +56,8 @@ textarea{resize:none;}
 	</div>
 	<!-- //float-frame -->
 </div>
-<!-- //layout-wrap -->
 
-<div class="layout-wrap">
-	<h1>문서 ID 작업</h1>
-	<div class="float-frame">
-		<div class="big-area">
-			<div class="small-unit"><button>읽기</button></div>
-			<div class="small-unit">2</div>
-			<div class="small-unit">3</div>
-			<div class="small-unit">4</div>
-		</div>
-		<div class="big-area">
-			<div class="small-unit">A</div>
-			<div class="small-unit">B</div>
-			<div class="small-unit">C</div>
-			<div class="small-unit">D</div>
-		</div>
-		<!-- //small-area -->
-	</div>
-	<!-- //float-frame -->
-</div>
 <!-- //layout-wrap -->
-
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:53%">문서 ID 작업</h1>
@@ -172,8 +89,8 @@ textarea{resize:none;}
 	</div>
 	<!-- float-frame -->
 	<div class="float-frame">
-		<div class="float-unit" style="margin-left: 2%; height:40px;">문서아이디
-			<input name="pic" />			
+		<div class="float-unit" style="margin-left: 2%; height:40px;">
+			문서아이디 : <input name="pic" />			
 			<input type="file" name="pic" style="margin-left: 10%;"/>
 			<button class="n1qlexcute">Upsert 실행</button>
 		</div>

@@ -1,5 +1,7 @@
 package com.poc.spring.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,12 +14,12 @@ public class MainController {
 	} 
 	
 	@RequestMapping("/n1ql")
-	public String postMethod1() { 
-		return "post"; 
+	public void postMethod1() { 
+		System.out.println("test");
 	} 
 	
 	@RequestMapping(value="/hey", method=RequestMethod.POST) 
-	public String postMethod2() { 
+	public String postMethod2(HttpServletRequest request) { 
 		return "hey post"; 
 	}
 }
