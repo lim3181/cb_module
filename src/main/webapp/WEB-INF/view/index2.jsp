@@ -15,11 +15,27 @@
       <img src="/static/image/cb_logo_bug_white_2.svg" alt="Couchbase Server" class="logobug">
     </a>
 </div>
-
 <div class="layout-wrap">
 	<h1>랜덤 데이터 생성</h1>
 	<div class="float-frame">
-		<div class="big-area">
+		<div class="big-area" >
+			<form name="example_input" action="request" method="post">
+	호스트명 :				<input type="text" name="txtHostName" size="10"/><br /><br />
+	유저명 :				<input type="text" name="txtUserName" size="10"/><br /><br />
+	패스워드 :				<input type="password" name="pwdPassword" size="10"/><br /><br />
+	버켓명 :				<input type="text" name="txtBucketName" size="10"/><br /><br />
+	Key-Value 타임아웃 :	<input type="text" name="txtKeyValueTO" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
+	View 타임아웃 :			<input type="text" name="txtViewTO" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
+	Query 타임아웃 :		<input type="text" name="txtQueryTO" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
+	Connect 타임아웃 :		<input type="text" name="txtConnectTO" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
+	DisConnect 타임아웃 :	<input type="text" name="txtDisConnectTO" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
+	Management 타임아웃 :	<input type="text" name="txtManagementTO" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
+		
+				<input type="submit" class="n1qlexcute">
+				<input type="reset" class="n1qlClear">
+			</form>
+		</div>
+		<div class="big-area" >
 			<form name="example_input" action="hey" method="post">
 	아이디 사이즈 :	<input type="text" name="docIdSize" size="3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br />
 	문서 사이즈 : 	<input type="text" name="docSize" size="15" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br />
