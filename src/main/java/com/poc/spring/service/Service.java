@@ -1,4 +1,4 @@
-package com.poc.spring.Service;
+package com.poc.spring.service;
 
 public class Service {
 	

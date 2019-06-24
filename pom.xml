@@ -24,12 +24,27 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
+			<groupId>org.apache.commons</groupId> 
+			<artifactId>commons-lang3</artifactId> 
+			<version>3.4</version>
+		</dependency>
+ 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!-- 		  <dependency>
+		   <groupId>com.couchbase.client</groupId>
+		   <artifactId>java-client</artifactId>
+		   <version>2.7.7</version>
+		 </dependency>
+		 
+		 <dependency>
+		    <groupId>com.couchbase.client</groupId>
+		    <artifactId>core-io</artifactId>
+		    <version>1.7.1</version>
+		</dependency> -->
 		
 		<dependency>
 		    <groupId>org.springframework.data</groupId>
@@ -50,6 +65,12 @@
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>servlets.com</groupId>
+		    <artifactId>cos</artifactId>
+		    <version>05Nov2002</version>
 		</dependency>
 	</dependencies>
 
