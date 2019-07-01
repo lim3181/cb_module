@@ -15,6 +15,7 @@ import com.poc.spring.service.CouchbaseService;
 
 @Controller
 public class MainController {
+	
 	@Autowired
 	CouchbaseService couchbaseService;
 	
@@ -60,10 +61,11 @@ public class MainController {
 	public Map<String, Object> randomData(HttpServletRequest request) throws Exception { 
 		return couchbaseService.makeRandomData(request); 
 	}
-	
-	@RequestMapping(value="/request", method=RequestMethod.POST) 
-	//@ResponseBody
-	public String postMethod3(HttpServletRequest request) { 
-		return "service"; 
+
+	@RequestMapping(value="/conData", method=RequestMethod.POST) 
+	@ResponseBody
+	public Map<String, Object> conData(HttpServletRequest request) throws Exception { 
+		return couchbaseService.connectionData(request); 
 	}
+
 }

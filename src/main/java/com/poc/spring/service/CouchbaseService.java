@@ -15,4 +15,7 @@ public interface CouchbaseService {
 
 	public Map<String, Object> makeRandomData(HttpServletRequest request)throws Exception;
 
+	public Map<String, Object> connectionData(HttpServletRequest request)throws Exception;
+
+
 }
