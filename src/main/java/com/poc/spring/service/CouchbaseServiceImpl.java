@@ -92,12 +92,7 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 		int threadCount = Integer.parseInt(request.getParameter("threadCount"));
 		String docContent;
 		
-		if (docType.equals("Json")) {
-		    docContent = "{\"a\":\"" + RandomStringUtils.randomAlphanumeric(docSize - 11) + "\"}";
-		} else {
-			docContent = RandomStringUtils.randomAlphanumeric(docSize);
-		}
-		Runnable couchTr = new CouchbaseThread(docContent, docCount, docIdSize, bucket);
+		Runnable couchTr = new CouchbaseThread(docSize, docCount, docIdSize, bucket);
 		
 		for(int i=0; i<threadCount; i++) {
 			
