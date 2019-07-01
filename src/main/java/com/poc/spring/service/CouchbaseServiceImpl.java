@@ -19,17 +19,19 @@ import com.couchbase.client.java.document.Document;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.StringDocument;
 import com.couchbase.client.java.document.json.JsonObject;
+import com.couchbase.client.java.env.CouchbaseEnvironment;
+import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 import com.couchbase.client.java.query.N1qlQuery;
 import com.couchbase.client.java.query.N1qlQueryResult;
+import com.poc.spring.dto.ConnectDTO;
 
 @Service
 public class CouchbaseServiceImpl implements CouchbaseService {
 
+	Bucket bucket;
+	 
 	@Override
 	public  Map<String, Object> excuteDataN1QL(HttpServletRequest request) throws Exception {
-		 Cluster cluster = CouchbaseCluster.create("localhost"); 
-		 cluster.authenticate("Administrator", "dpsxndpa1!");
-		 Bucket bucket = cluster.openBucket("travel-sample");
 		 N1qlQueryResult result = bucket.query(N1qlQuery.simple(request.getParameter("n1qlInput").toString()));
 		 
 		 Map<String, Object> resultMap = new HashMap<String,Object>();
@@ -42,10 +44,7 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 
 	@Override
 	public Map<String, Object> excuteSdkJob(HttpServletRequest request) throws Exception {
-		
-		 Cluster cluster = CouchbaseCluster.create("localhost"); 
-		 cluster.authenticate("Administrator", "dpsxndpa1!");
-		 Bucket bucket = cluster.openBucket("travel-sample");
+
 		 String jobs = request.getParameter("sdkJobType");
 		 String docId = request.getParameter("sdkJobDocId");
 		 Map<String, Object> resultMap = new HashMap<String,Object>();
@@ -67,10 +66,7 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 
 	@Override
 	public Map<String, Object> uploadFile(HttpServletRequest request) throws Exception {
-		 Cluster cluster = CouchbaseCluster.create("localhost"); 
-		 cluster.authenticate("Administrator", "dpsxndpa1!");
-		 Bucket bucket = cluster.openBucket("travel-sample");
-		 
+
 		String fileName = request.getParameter("fileName");
        	int rowNum = 0;
         System.out.println("======== JSON FILE INSERT 시작 ========");
@@ -83,12 +79,11 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 		return null;
 	}
 
+	/*  randomData  */
 	@Override
 	public Map<String, Object> makeRandomData(HttpServletRequest request) throws Exception {
-		 Cluster cluster = CouchbaseCluster.create("localhost"); 
-		 cluster.authenticate("Administrator", "dpsxndpa1!");
-		 Bucket bucket = cluster.openBucket("travel-sample");
-		 
+		
+
 		int docSize = Integer.parseInt(request.getParameter("docSize"));
 		int docIdSize = Integer.parseInt(request.getParameter("docIdSize"));
 		int docCount = Integer.parseInt(request.getParameter("docCount"));
@@ -113,4 +108,107 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 		return null;
 	}
 
+	@Override
+	public Map<String, Object> connectionData(HttpServletRequest request) throws Exception {
+		
+		request.setCharacterEncoding("utf-8");
+		
+		/** Connection Info **/
+		String 	strHostName 	= request.getParameter("txtHostName");
+		String 	strUserName 	= request.getParameter("txtUserName");
+		String 	strPassword 	= request.getParameter("pwdPassword");
+		String 	strBucketName	= request.getParameter("txtBucketName");
+		
+		/** Timeout Info **/
+		Long 	lKeyValueTO 	= Long.parseLong(request.getParameter("txtKeyValueTO"));
+		Long 	lViewTO 		= Long.parseLong(request.getParameter("txtViewTO"));
+		Long 	lQueryTO 		= Long.parseLong(request.getParameter("txtQueryTO"));
+		Long 	lConnectTO 		= Long.parseLong(request.getParameter("txtConnectTO"));
+		Long 	lDisConnectTO 	= Long.parseLong(request.getParameter("txtDisConnectTO"));
+		Long 	lManagementTO 	= Long.parseLong(request.getParameter("txtManagementTO"));
+		
+		/** Bootstrap Info **/
+		boolean	isSslEnable 		= Boolean.parseBoolean(request.getParameter("rdoSslEnable"));
+		String 	strSslKeyLoc 		= request.getParameter("txtSslKeyLoc");
+		String 	strSslKeyPwd 		= request.getParameter("pwdSslKeyPwd");
+		boolean isHttpEnable 		= Boolean.parseBoolean(request.getParameter("rdoHttpEnabled"));
+		int 	intHttpDrtPort 		= Integer.parseInt(request.getParameter("txtHttpDirectPort"));
+		int 	intHttpSslPort 		= Integer.parseInt(request.getParameter("txtHttpSslPort"));
+		boolean isCarrEnable 		= Boolean.parseBoolean(request.getParameter("rdoCarrierEnable"));
+		int 	intCarrDrtPort 		= Integer.parseInt(request.getParameter("txtCarrierDirectPort"));
+		int 	intCarrSslPort		= Integer.parseInt(request.getParameter("txtCarrierSslPort"));
+		boolean isDnsSrvEnable		= Boolean.parseBoolean(request.getParameter("rdoDnsSrvEnable"));
+		boolean isMutatTknEnable	= Boolean.parseBoolean(request.getParameter("rdoMutationTknEnable"));
+
+		/** Reliability Info **/
+		Long lMaxReqLifeTime = Long.parseLong(request.getParameter("txtMaxReqLifeTime"));
+		Long lKeepAliveInterval = Long.parseLong(request.getParameter("txtKeepAliveInterval"));
+
+		/** Performance Info **/
+		int intKvEndpoints 			= Integer.parseInt(request.getParameter("txtKvEndpoints"));
+		int intViewEndpoint 		= Integer.parseInt(request.getParameter("txtViewEndpoint"));
+		int intQueryEndpoint 		= Integer.parseInt(request.getParameter("txtQueryEndpoint"));
+		boolean isTcpNodelayEnable 	= Boolean.parseBoolean(request.getParameter("rdoTcpNodelayEnable"));
+
+		/** Advanced Info **/
+		int intRequestBufferSize 	= Integer.parseInt(request.getParameter("txtRequestBufferSize"));
+		int intResponseBufferSize 	= Integer.parseInt(request.getParameter("txtResponseBufferSize"));
+		boolean isBufferPoolEnab 	= Boolean.parseBoolean(request.getParameter("rdoBufferPoolEnab"));
+		
+		
+		ConnectDTO dto = new ConnectDTO(strHostName,strUserName,strPassword,strBucketName,lKeyValueTO,lViewTO,lQueryTO,lConnectTO,lDisConnectTO,lManagementTO,
+				isSslEnable,strSslKeyLoc,strSslKeyPwd,isHttpEnable,intHttpDrtPort,intHttpSslPort,isCarrEnable,intCarrDrtPort,intCarrSslPort,isDnsSrvEnable,isMutatTknEnable,
+				lMaxReqLifeTime,lKeepAliveInterval,
+				intKvEndpoints,intViewEndpoint,intQueryEndpoint,isTcpNodelayEnable,
+				intRequestBufferSize,intResponseBufferSize,isBufferPoolEnab);
+		
+		
+		CouchbaseEnvironment env = DefaultCouchbaseEnvironment
+				  .builder()
+				  
+				  .kvTimeout(lKeyValueTO)
+				  .viewTimeout(lViewTO)
+				  .queryTimeout(lQueryTO)
+				  .connectTimeout(lConnectTO)
+				  .disconnectTimeout(lDisConnectTO)
+				  .managementTimeout(lManagementTO)
+				  
+				  .sslEnabled(isSslEnable) 
+				  .sslKeystoreFile(strSslKeyLoc)
+				  .sslKeystorePassword(strSslKeyPwd) 
+				  .bootstrapHttpEnabled(isHttpEnable)
+				  .bootstrapHttpDirectPort(intHttpDrtPort)
+				  .bootstrapHttpSslPort(intHttpSslPort) 
+				  .bootstrapCarrierEnabled(isCarrEnable)
+				  .bootstrapCarrierDirectPort(intCarrDrtPort)
+				  .bootstrapCarrierSslPort(intCarrSslPort) 
+				  .dnsSrvEnabled(isDnsSrvEnable)
+				  .mutationTokensEnabled(isMutatTknEnable) 
+				  
+				  .maxRequestLifetime(lMaxReqLifeTime)
+				  .keepAliveInterval(lKeepAliveInterval)		
+
+				  .kvEndpoints(intKvEndpoints) 
+				  .viewEndpoints(intViewEndpoint)
+				  .queryEndpoints(intQueryEndpoint) 
+				  .tcpNodelayEnabled(isTcpNodelayEnable)
+				  
+				  .requestBufferSize(intRequestBufferSize)
+				  .responseBufferSize(intResponseBufferSize)		
+				  .bufferPoolingEnabled(isBufferPoolEnab)		 
+				  
+				  .build();
+				  
+		
+		Cluster cluster = CouchbaseCluster.create(env,dto.getStrHostName()); 
+		cluster.authenticate(dto.getStrUserName(),dto.getStrPassword());
+		bucket = cluster.openBucket(dto.getStrBucketName());
+		
+				
+		return null;
+		
+	}
+
+	
+	
 }
