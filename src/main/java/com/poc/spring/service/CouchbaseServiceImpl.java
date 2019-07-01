@@ -114,18 +114,18 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 		request.setCharacterEncoding("utf-8");
 		
 		/** Connection Info **/
-		String 	strHostName 	= request.getParameter("txtHostName");
-		String 	strUserName 	= request.getParameter("txtUserName");
-		String 	strPassword 	= request.getParameter("pwdPassword");
-		String 	strBucketName	= request.getParameter("txtBucketName");
+		String 	strHostName 		= request.getParameter("txtHostName");
+		String 	strUserName 		= request.getParameter("txtUserName");
+		String 	strPassword 		= request.getParameter("pwdPassword");
+		String 	strBucketName		= request.getParameter("txtBucketName");
 		
 		/** Timeout Info **/
-		Long 	lKeyValueTO 	= Long.parseLong(request.getParameter("txtKeyValueTO"));
-		Long 	lViewTO 		= Long.parseLong(request.getParameter("txtViewTO"));
-		Long 	lQueryTO 		= Long.parseLong(request.getParameter("txtQueryTO"));
-		Long 	lConnectTO 		= Long.parseLong(request.getParameter("txtConnectTO"));
-		Long 	lDisConnectTO 	= Long.parseLong(request.getParameter("txtDisConnectTO"));
-		Long 	lManagementTO 	= Long.parseLong(request.getParameter("txtManagementTO"));
+		Long 	lKeyValueTO 		= Long.parseLong(request.getParameter("txtKeyValueTO"));
+		Long 	lViewTO 			= Long.parseLong(request.getParameter("txtViewTO"));
+		Long 	lQueryTO 			= Long.parseLong(request.getParameter("txtQueryTO"));
+		Long 	lConnectTO 			= Long.parseLong(request.getParameter("txtConnectTO"));
+		Long 	lDisConnectTO 		= Long.parseLong(request.getParameter("txtDisConnectTO"));
+		Long 	lManagementTO 		= Long.parseLong(request.getParameter("txtManagementTO"));
 		
 		/** Bootstrap Info **/
 		boolean	isSslEnable 		= Boolean.parseBoolean(request.getParameter("rdoSslEnable"));
@@ -138,11 +138,11 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 		int 	intCarrDrtPort 		= Integer.parseInt(request.getParameter("txtCarrierDirectPort"));
 		int 	intCarrSslPort		= Integer.parseInt(request.getParameter("txtCarrierSslPort"));
 		boolean isDnsSrvEnable		= Boolean.parseBoolean(request.getParameter("rdoDnsSrvEnable"));
-		boolean isMutatTknEnable	= Boolean.parseBoolean(request.getParameter("rdoMutationTknEnable"));
+		boolean isMutatTknEnable 	= Boolean.parseBoolean(request.getParameter("rdoMutationTknEnable"));
 
 		/** Reliability Info **/
-		Long lMaxReqLifeTime = Long.parseLong(request.getParameter("txtMaxReqLifeTime"));
-		Long lKeepAliveInterval = Long.parseLong(request.getParameter("txtKeepAliveInterval"));
+		Long lMaxReqLifeTime 		= Long.parseLong(request.getParameter("txtMaxReqLifeTime"));
+		Long lKeepAliveInterval	 	= Long.parseLong(request.getParameter("txtKeepAliveInterval"));
 
 		/** Performance Info **/
 		int intKvEndpoints 			= Integer.parseInt(request.getParameter("txtKvEndpoints"));
@@ -156,23 +156,28 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 		boolean isBufferPoolEnab 	= Boolean.parseBoolean(request.getParameter("rdoBufferPoolEnab"));
 		
 		
-		ConnectDTO dto = new ConnectDTO(strHostName,strUserName,strPassword,strBucketName,lKeyValueTO,lViewTO,lQueryTO,lConnectTO,lDisConnectTO,lManagementTO,
+		ConnectDTO dto = new ConnectDTO(
+				strHostName,strUserName,strPassword,strBucketName,
+				lKeyValueTO,lViewTO,lQueryTO,lConnectTO,lDisConnectTO,lManagementTO,
 				isSslEnable,strSslKeyLoc,strSslKeyPwd,isHttpEnable,intHttpDrtPort,intHttpSslPort,isCarrEnable,intCarrDrtPort,intCarrSslPort,isDnsSrvEnable,isMutatTknEnable,
 				lMaxReqLifeTime,lKeepAliveInterval,
 				intKvEndpoints,intViewEndpoint,intQueryEndpoint,isTcpNodelayEnable,
-				intRequestBufferSize,intResponseBufferSize,isBufferPoolEnab);
+				intRequestBufferSize,intResponseBufferSize,isBufferPoolEnab
+		);
 		
 		
 		CouchbaseEnvironment env = DefaultCouchbaseEnvironment
 				  .builder()
-				  
+
+					/** Timeout Info **/
 				  .kvTimeout(lKeyValueTO)
 				  .viewTimeout(lViewTO)
 				  .queryTimeout(lQueryTO)
 				  .connectTimeout(lConnectTO)
 				  .disconnectTimeout(lDisConnectTO)
 				  .managementTimeout(lManagementTO)
-				  
+
+					/** Bootstrap Info **/
 				  .sslEnabled(isSslEnable) 
 				  .sslKeystoreFile(strSslKeyLoc)
 				  .sslKeystorePassword(strSslKeyPwd) 
@@ -184,15 +189,18 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 				  .bootstrapCarrierSslPort(intCarrSslPort) 
 				  .dnsSrvEnabled(isDnsSrvEnable)
 				  .mutationTokensEnabled(isMutatTknEnable) 
-				  
+
+					/** Reliability Info **/
 				  .maxRequestLifetime(lMaxReqLifeTime)
 				  .keepAliveInterval(lKeepAliveInterval)		
 
+					/** Performance Info **/
 				  .kvEndpoints(intKvEndpoints) 
 				  .viewEndpoints(intViewEndpoint)
 				  .queryEndpoints(intQueryEndpoint) 
 				  .tcpNodelayEnabled(isTcpNodelayEnable)
-				  
+
+					/** Advanced Info **/
 				  .requestBufferSize(intRequestBufferSize)
 				  .responseBufferSize(intResponseBufferSize)		
 				  .bufferPoolingEnabled(isBufferPoolEnab)		 

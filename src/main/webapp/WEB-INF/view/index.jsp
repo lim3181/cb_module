@@ -113,90 +113,192 @@ function connectionData(){
 </div>
 
 <div class="layout-wrap">
-	<h1>랜덤 데이터 생성 및 환경 구성</h1>
+	<div>
+		<h1 style="float:left; width:70%">&nbsp&nbsp&nbsp&nbsp서버 연결 및 환경 구성</h1>
+		<h1>랜덤 데이터 생성</h1>
+	</div>
 	<div class="float-frame">
 	<form id="conDataForm" name="conDataForm" >
-		<div class="big-area" >
-				호스트명 :				<input type="text" name="txtHostName" size="10"/><br /><br />
-				유저명 :				<input type="text" name="txtUserName" size="10"/><br /><br />
-				패스워드 :				<input type="password" name="pwdPassword" size="10"/><br /><br />
-				버켓명 :				<input type="text" name="txtBucketName" size="10"/><br /><br />
-				Key-Value 타임아웃 :	<input type="text" name="txtKeyValueTO" size="10" value=2500 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				View 타임아웃 :			<input type="text" name="txtViewTO" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				Query 타임아웃 :		<input type="text" name="txtQueryTO" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				Connect 타임아웃 :		<input type="text" name="txtConnectTO" size="10" value=5000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				DisConnect 타임아웃 :	<input type="text" name="txtDisConnectTO" size="10" value=25000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				Management 타임아웃 :	<input type="text" name="txtManagementTO" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-		
-		</div>
-		
-
-		
-		<div class="big-area">
-				암호화 사용 : 	<input type="radio" name="rdoSslEnable" value="true"/>true 
-								<input type="radio" name="rdoSslEnable" value="false" checked/>false<br /><br />
-				SSL 키 저장소 위치 : <input type="text" name="txtSslKeyLoc" size="10" value=""/><br /><br />
-				SSL 키 저장소 비밀번호 : <input type="password" name="pwdSslKeyPwd" size="10" value=""/><br /><br />
-				HTTP를 통한 config 로드 : 	<input type="radio" name="rdoHttpEnabled" value="true" checked/>true
-											<input type="radio" name="rdoHttpEnabled" value="false"/>false<br /><br />
-				HTTP 비 암호화 포트 config : <input type="text" name="txtHttpDirectPort" size="10" value=8091 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				HTTP 암호화 포트 config : <input type="text" name="txtHttpSslPort" size="10" value=18091 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				Carrier Publication을 통해 config 로드 : 	<br /><input type="radio" name="rdoCarrierEnable" value="true" checked/>true
-															<input type="radio" name="rdoCarrierEnable" value="false"/>false<br /><br />
-				Carrier 비암호화 포트 config : <input type="text" name="txtCarrierDirectPort" size="10" value=11210 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				Carrier 암호화 포트 config : <input type="text" name="txtCarrierSslPort" size="10" value=11207 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				DNS SRV 사용 : 	<input type="radio" name="rdoDnsSrvEnable" value="true"/>true
-								<input type="radio" name="rdoDnsSrvEnable" value="false" checked/>false<br /><br />
-				사용 가능한 변조 토큰 : <input type="radio" name="rdoMutationTknEnable" value="true"/>true
-										<input type="radio" name="rdoMutationTknEnable" value="false" checked/>false<br /><br />
-										<br /><br />    
-		</div>
-		
-		
-		<div class="big-area">
-				최대 요청 Lifetime :<input type="text" name="txtMaxReqLifeTime" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				소켓 유지 시간 :	<input type="text" name="txtKeepAliveInterval" size="10" value=30000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-  
+		<div class="float-division">
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">Connection
+				</div><br />
 			
-			
-			<br /><br />
-				노드당 key/value Endpoint :	<input type="text" name="txtKvEndpoints" size="10" value=1 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				노드당 View Endpoint : <input type="text" name="txtViewEndpoint" size="10" value=1 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				노드당 Query Endpoint :	<input type="text" name="txtQueryEndpoint" size="10" value=1 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				TCP Nodelay : 	<input type="radio" name="rdoTcpNodelayEnable" value="true" checked/>true
-								<input type="radio" name="rdoTcpNodelayEnable" value="false"/>false<br /><br />
+				<div class="fieldlabel">*호스트명</div>	
+				<div class="formfield"><input type="text" name="txtHostName" size="10"/><br /><br /></div>
 				
+				<div class="fieldlabel">*유 저 명</div>	
+				<div class="formfield"><input type="text" name="txtUserName" size="10"/><br /><br /></div>
+				
+				<div class="fieldlabel">*패스워드</div>	
+				<div class="formfield">	<input type="password" name="pwdPassword" size="10"/><br /><br /></div>
+				
+				<div class="fieldlabel">*버 켓 명</div>	
+				<div class="formfield"><input type="text" name="txtBucketName" size="10"/><br /><br /></div>
+				<br />
+				
+				
+				<div style="margin-left:20px; font-weight:bold"></br>Time Out Option
+				</div><br />
+				
+				<div class="fieldlabelto">Key-Value 타임아웃 </div>		
+				<div class="formfield"><input type="text" name="txtKeyValueTO" size="10" value=2500 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelto">View 타임아웃 </div>				
+				<div class="formfield"><input type="text" name="txtViewTO" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelto">Query 타임아웃 </div>			
+				<div class="formfield"><input type="text" name="txtQueryTO" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelto">Connect 타임아웃 </div>			
+				<div class="formfield"><input type="text" name="txtConnectTO" size="10" value=5000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelto">DisConnect 타임아웃 </div>		
+				<div class="formfield"><input type="text" name="txtDisConnectTO" size="10" value=25000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+					
+				<div class="fieldlabelto">Management 타임아웃 </div>		
+				<div class="formfield"><input type="text" name="txtManagementTO" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+			
+			</div>
+			
+	
+			
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">Bootstrap Option
+				</div><br />
+				
+				<div class="fieldlabelbs">암호화 사용</div>
+				<div class="formfield">	<input type="radio" name="rdoSslEnable" value="true"/>true 
+										<input type="radio" name="rdoSslEnable" value="false" checked/>false<br /><br /></div>
+										
+				<div class="fieldlabelbs">SSL 키 저장소 위치</div>
+				<div class="formfield"><input type="text" name="txtSslKeyLoc" size="10" value=""/><br /><br /></div>
+				
+				<div class="fieldlabelbs">SSL 키 저장소 비밀번호 </div>
+				<div class="formfield"><input type="password" name="pwdSslKeyPwd" size="10" value=""/><br /><br /></div>
+				
+				<div class="fieldlabelbs">HTTP를 통한 config 로드</div>
+				<div class="formfield">	<input type="radio" name="rdoHttpEnabled" value="true" checked/>true
+										<input type="radio" name="rdoHttpEnabled" value="false"/>false<br /><br /></div>
+										
+				<div class="fieldlabelbs">HTTP 비 암호화 포트 config </div>
+				<div class="formfield"><input type="text" name="txtHttpDirectPort" size="10" value=8091 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelbs">HTTP 암호화 포트 config </div>
+				<div class="formfield"><input type="text" name="txtHttpSslPort" size="10" value=18091 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelbs">Carrier Publication을 통해 config 로드</div>
+				<div class="formfield">	<input type="radio" name="rdoCarrierEnable" value="true" checked/>true
+										<input type="radio" name="rdoCarrierEnable" value="false"/>false<br /><br /><br /></div>
+										
+				<div class="fieldlabelbs">Carrier 비암호화 포트 config </div>
+				<div class="formfield"><input type="text" name="txtCarrierDirectPort" size="10" value=11210 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelbs">Carrier 암호화 포트 config</div>
+				<div class="formfield"><input type="text" name="txtCarrierSslPort" size="10" value=11207 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelbs">DNS SRV 사용 </div>
+				<div class="formfield">	<input type="radio" name="rdoDnsSrvEnable" value="true"/>true
+										<input type="radio" name="rdoDnsSrvEnable" value="false" checked/>false<br /><br /></div>
+										
+				<div class="fieldlabelbs">사용 가능한 변조 토큰 </div>
+				<div class="formfield">	<input type="radio" name="rdoMutationTknEnable" value="true"/>true
+										<input type="radio" name="rdoMutationTknEnable" value="false" checked/>false<br /><br /></div>
+										
+										<br /><br />    
+			</div>
 			
 			
-			<br /><br />
-				Ring 버퍼 사이즈 요청 :	<input type="text" name="txtRequestBufferSize" size="10" value=16384 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				Ring 버퍼 사이즈 응답 :	<input type="text" name="txtResponseBufferSize" size="10" value=16384 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br />
-				버퍼 풀 활성화 :	<input type="radio" name="rdoBufferPoolEnab" value="true" checked>true
-									<input type="radio" name="rdoBufferPoolEnab" value="false">false<br /><br />
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">Reliability option
+				</div><br />
+				
+				<div class="fieldlabelrb">최대 요청 Lifetime</div>
+				<div class="formfield"><input type="text" name="txtMaxReqLifeTime" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelrb">소켓 유지 시간</div>	
+				<div class="formfield"><input type="text" name="txtKeepAliveInterval" size="10" value=30000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+	 	
+				<br />
+				<div style="margin-left:20px; font-weight:bold">Performance option
+				</div><br />
+				
+				<div class="fieldlabelpm">노드당 key/value Endpoint</div>	
+				<div class="formfield"><input type="text" name="txtKvEndpoints" size="10" value=1 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelpm">노드당 View Endpoint</div> 
+				<div class="formfield"><input type="text" name="txtViewEndpoint" size="10" value=1 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelpm">노드당 Query Endpoint </div>	
+				<div class="formfield"><input type="text" name="txtQueryEndpoint" size="10" value=1 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+				
+				<div class="fieldlabelpm">TCP Nodelay</div> 	
+				<div class="formfield">	<input type="radio" name="rdoTcpNodelayEnable" value="true" checked/>true
+										<input type="radio" name="rdoTcpNodelayEnable" value="false"/>false<br /><br /></div>
 			
-		<div align="right">
-			<button class="n1qlexcute" onclick="connectionData();">저장</button></div>
+			
+				<br />
+				<div style="margin-left:20px; font-weight:bold">Advanced option
+				</div><br />
+				
+				<div class="fieldlabelad">Ring 버퍼 사이즈 요청 </div>	
+				<div class="formfield"><input type="text" name="txtRequestBufferSize" size="10" value=16384 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+					
+				<div class="fieldlabelad">Ring 버퍼 사이즈 응답 </div>	
+				<div class="formfield"><input type="text" name="txtResponseBufferSize" size="10" value=16384 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
+					
+				<div class="fieldlabelad">버퍼 풀 활성화</div>	
+				<div class="formfield">	<input type="radio" name="rdoBufferPoolEnab" value="true" checked>true
+										<input type="radio" name="rdoBufferPoolEnab" value="false">false<br /><br /></div>	
+			
+				<div align="right">
+					<button class="n1qlexcute" onclick="connectionData();">저장</button></div>
+			</div>
 		</div>
-		</form>
-		<form id="randomDataForm" name="randomDataForm" >
-		<div class="big-area" >
-				아이디 사이즈 :		<input type="text" id ="docIdSize" name="docIdSize" size="3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br />
-				문서 사이즈 : 		<input type="text" id ="docSize" name="docSize" size="15" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br />
-    			생성 할 문서의 수 :	<input type="text" name="docCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>건<br /><br />
-				문서 종류 : 		<input type="radio" name="docType" value="Json" /> json
-									<input type="radio" name="docType" value="Binary" /> binary<br /><br />    
-<!-- 	작업 반복 여부 : <input type="radio" name="loop" value="Ture" /> true
-				<input type="radio" name="loop" value="False" /> false<br /><br /> -->
-				쓰레드 개수 : 		<input type="text" name="threadCount" size="3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />	
-			<button class="n1qlexcute" onclick="randomData();">실행</button>
+	</form>
+		
+		
+	<form id="randomDataForm" name="randomDataForm" >	
+		<div class="float-division" >
+		
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">Create Random Data
+				</div><br />
+				<div class="fieldlabelrd">아이디 사이즈 </div>	
+				<div class="formfield"><input type="text" id ="docIdSize" name="docIdSize" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br /></div>
+				
+				<div class="fieldlabelrd">문서 사이즈 </div>	
+				<div class="formfield"><input type="text" id ="docSize" name="docSize" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br /></div>
+				
+   				<div class="fieldlabelrd">생성 할 문서의 수 </div>
+   				<div class="formfield"><input type="text" name="docCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>건<br /><br /></div>
+   				
+				<div class="fieldlabelrd">문서 종류</div>
+				<div class="formfield">	<input type="radio" name="docType" value="Json" /> json
+										<input type="radio" name="docType" value="Binary" /> binary<br /><br />    </div>
+									
+				<!--작업 반복 여부 : 	<input type="radio" name="loop" value="Ture" /> true
+										<input type="radio" name="loop" value="False" /> false<br /><br /> -->
+										
+				<div class="fieldlabelrd">쓰레드 개수</div>
+				<div class="formfield"><input type="text" name="threadCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />	</div>
+				
+				<div class="relative" align="right">
+					<button class="n1qlexcute" onclick="randomData();">실행</button>
+				</div>
+			</div>
 		</div>
-		</form>
-		<!-- //small-area -->
+	
+	</form>
+		
+		
+		
 	</div>
-	<!-- //float-frame -->
+<!-- //float-frame -->
 </div>
 
-<!-- //layout-wrap -->
+
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:53%">N1QL 실행창</h1>
