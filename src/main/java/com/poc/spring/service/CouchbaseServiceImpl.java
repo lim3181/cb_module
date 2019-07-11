@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.bucket.BucketType;
+import com.couchbase.client.java.cluster.BucketSettings;
+import com.couchbase.client.java.cluster.ClusterManager;
+import com.couchbase.client.java.cluster.DefaultBucketSettings;
 import com.couchbase.client.java.document.Document;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.StringDocument;
@@ -27,18 +31,13 @@ import com.poc.spring.dto.ConnectDTO;
 
 @Service
 public class CouchbaseServiceImpl implements CouchbaseService {
-
+	Cluster cluster;
 	Bucket bucket;
 	 
 	@Override
 	public  Map<String, Object> excuteDataN1QL(HttpServletRequest request) throws Exception {
-		 N1qlQueryResult result = bucket.query(N1qlQuery.simple(request.getParameter("n1qlInput").toString()));
-		 
-		 Map<String, Object> resultMap = new HashMap<String,Object>();
-		 resultMap.put("status", result.status());
-		 resultMap.put("allRows", result.allRows().toString());
-		 resultMap.put("error", result.errors().toString());
-		 return resultMap;
+
+		 return null;
 
 	}
 
@@ -60,6 +59,12 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 		 } else if (jobs.equals("delete")) {
 			 JsonDocument result = bucket.remove(docId);
 			 resultMap.put("result", "문서 '"+result.id() + "' 가 정상적으로 삭제되었습니다.");
+		 } else {
+			 N1qlQueryResult result = bucket.query(N1qlQuery.simple(request.getParameter("sdkWriInput").toString()));
+			 
+			 resultMap.put("status", result.status());
+			 resultMap.put("allRows", result.allRows().toString());
+			 resultMap.put("error", result.errors().toString());
 		 }
 		 return resultMap;
 	}
@@ -203,13 +208,55 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 				  .build();
 				  
 		
-		Cluster cluster = CouchbaseCluster.create(env,dto.getStrHostName()); 
+		cluster = CouchbaseCluster.create(env,dto.getStrHostName()); 
 		cluster.authenticate(dto.getStrUserName(),dto.getStrPassword());
 		bucket = cluster.openBucket(dto.getStrBucketName());
 		
 				
 		return null;
 		
+	}
+
+	@Override
+	public Map<String, Object> createBucket(HttpServletRequest request) {
+		Cluster createBucketCluster = CouchbaseCluster.create(request.getParameter("hostName")); 
+		ClusterManager clusterManager = createBucketCluster.clusterManager(request.getParameter("userName"), request.getParameter("userPassword"));
+		if (request.getParameter("newBucketType").equals("Couchbase")) {
+			BucketSettings bucketSettings = new DefaultBucketSettings.Builder()
+				    .type(BucketType.COUCHBASE)
+				    .name(request.getParameter("newBucketName"))
+				    .password("")
+				    .quota(Integer.parseInt(request.getParameter("bucketMemory"))) // megabytes
+				    .replicas(Integer.parseInt(request.getParameter("newBucketReplicas")))
+				    .indexReplicas(Boolean.parseBoolean(request.getParameter("indexReplicaEnable")))
+				    .enableFlush(Boolean.parseBoolean(request.getParameter("flushEnable")))
+				    .build();
+			clusterManager.insertBucket(bucketSettings);
+				
+		} else if (request.getParameter("newBucketType").equals("Ephmeral")) {
+			BucketSettings bucketSettings = new DefaultBucketSettings.Builder()
+				    .type(BucketType.EPHEMERAL)
+				    .name(request.getParameter("newBucketName"))
+				    .password("")
+				    .quota(Integer.parseInt(request.getParameter("bucketMemory"))) // megabytes
+				    .replicas(Integer.parseInt(request.getParameter("newBucketReplicas")))
+				    .indexReplicas(Boolean.parseBoolean(request.getParameter("indexReplicaEnable")))
+				    .enableFlush(Boolean.parseBoolean(request.getParameter("flushEnable")))
+				    .build();
+			clusterManager.insertBucket(bucketSettings);
+		} else {
+			BucketSettings bucketSettings = new DefaultBucketSettings.Builder()
+				    .type(BucketType.MEMCACHED)
+				    .name(request.getParameter("newBucketName"))
+				    .password("")
+				    .quota(Integer.parseInt(request.getParameter("bucketMemory"))) // megabytes
+				    .replicas(Integer.parseInt(request.getParameter("newBucketReplicas")))
+				    .indexReplicas(Boolean.parseBoolean(request.getParameter("indexReplicaEnable")))
+				    .enableFlush(Boolean.parseBoolean(request.getParameter("flushEnable")))
+				    .build();
+			clusterManager.insertBucket(bucketSettings);
+		}
+		return null;
 	}
 
 	
