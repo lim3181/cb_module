@@ -51,25 +51,32 @@ function sdkJobExcute(){
      });
 }
 
-function uploadFile(){
+function test(){
     var data = jQuery("#fileUpload").serializeArray();
 
     $.ajax({
-        type : "post",
+        type : "POST",
+        enctype : "multipart/form-data",
         url : "/fileUpload",
         data : data,
+        processData : false,
+        contentType : false,
         error: function(xhr, status, error){
-        	$('#sdkJobOutput').val("해당 문서의 아이디가 없습니다.")
+        	$('#n1ql').val("해당 문서의 아이디가 없습니다.")
         },
         success : function(data){
 	        var obj = eval(data);
 			if (obj.status == "success"){
-				$('#sdkJobOutput').val(obj.allRows)
+	        	alert("SUCCESS");
+				$('#n1ql').val(obj.allRows)
 			}
 			else {
-				$('#sdkJobOutput').val(obj.error)
+	        	alert("ETC ERROR");
+				$('#n1ql').val(obj.error)
 			}
+        
         }
+        
     });
 }
 
@@ -104,6 +111,35 @@ function connectionData(){
 	
 }
 
+function uploadFile(){
+    var data = new FormData(document.getElementById('fileUpload'));
+     $.ajax({
+        type : "post",
+        url : "/fileUpload",
+        enctype: "multipart/form-data",
+        data : data,
+        processData : false,
+        contentType : false,
+        error : function(xhr, status, error) {   
+        	$('#n1ql').val("업로드 처리 오류");
+        	console.log(error);
+        	console.log(error.status);
+        },
+
+        success : function(data){
+			alert("OK");	
+			var obj = eval(data);
+			if (obj.status == "success"){
+	        	alert("SUCCESS");
+				$('#n1ql').val(obj.allRows)
+			}
+			
+        }
+        
+    }); 
+}
+
+
 </script>
 <body>
 <div id="header">
@@ -112,6 +148,7 @@ function connectionData(){
     </a>
 </div>
 
+<!-- 서버 연결 및 환경 구성 -->
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:70%">&nbsp&nbsp&nbsp&nbsp서버 연결 및 환경 구성</h1>
@@ -299,6 +336,7 @@ function connectionData(){
 </div>
 
 
+<!-- N1QL 실행창 -->
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:53%">N1QL 실행창</h1>
@@ -318,10 +356,9 @@ function connectionData(){
 		</div>
 		<div class="clear"> </div>
 	</div>
-	<!-- //float-frame -->
 </div>
 
-<!-- //layout-wrap -->
+<!-- 문서 ID 작업 -->
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:53%">문서 ID 작업</h1>
@@ -349,18 +386,20 @@ function connectionData(){
 	<!-- //float-frame -->
 </div>
 
-<!-- <div class="layout-wrap">
+
+<!-- Json 및 txt 파일 Upsert -->
+<div class="layout-wrap">
 	<div>
 		<h1 >Json 및 txt 파일 Upsert</h1>
 	</div>
-	float-frame
 	<div class="float-frame">
 		<div class="float-unit" style="margin-left: 2%; height:80px;">
-		<form id="fileUpload" name="fileUpload">
-			문서아이디 : <input  id ="docId" name="docId" />			
-			파일 경로 : <input id ="fileName" name="fileName" style="margin-left: 10%;"/>
+		<form id="fileUpload" name="fileUpload" enctype="multipart/form-data">
+			문서아이디 : <input  id ="docId" name="docId" required="required"/><br />	
+			파일 경로 : 
+			<input id ="fileName" name="fileName" type=file accept=".csv, .json" required="required">
 		</form>	
-			<button class="n1qlexcute" onclick="uploadFile();">파일 Upsert 실행</button>
+			<button type="submit" class="n1qlexcute" onclick="uploadFile();">파일 Upsert 실행</button>
 		
 		</div>
 		<div class="float-unit" style="margin-left: 2%; height:80px;">
@@ -368,7 +407,6 @@ function connectionData(){
 		</div>
 		<div class="clear"> </div>
 	</div>
-	//float-frame
-</div> -->
+</div> 
 </body>
 </html>

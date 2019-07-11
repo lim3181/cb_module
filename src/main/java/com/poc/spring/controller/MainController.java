@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.poc.spring.service.CouchbaseService;
 
 @Controller
@@ -52,8 +55,8 @@ public class MainController {
 	
 	@RequestMapping(value="/fileUpload", method=RequestMethod.POST) 
 	@ResponseBody
-	public Map<String, Object> fileUpload(HttpServletRequest request) throws Exception { 
-		return couchbaseService.uploadFile(request); 
+	public Map<String, Object> fileUpload(MultipartHttpServletRequest mRequest) throws Exception { 
+		return couchbaseService.uploadFile(mRequest); 
 	}
 	
 	@RequestMapping(value="/randomData", method=RequestMethod.POST) 
