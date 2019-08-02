@@ -420,9 +420,9 @@ function uploadFile(){
 <!-- //float-frame -->
 </div>
 
-
-<!-- <div class="layout-wrap">
-<!-- N1QL 실행창 -->
+<!--  
+<div class="layout-wrap">
+N1QL 실행창
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:53%">N1QL 실행창</h1>
@@ -473,16 +473,6 @@ function uploadFile(){
 		</div>
 		<div class="clear"> </div>
 	</div>
-	<!-- //float-frame -->
-	<Form action="/receive" Method="POST" enctype="multipart/form-data">
-
-이름 : <Input type="TEXT" name="userName"> <BR>
-
-파일 : <Input type="FILE" name="userFile"><BR>
-
-<input type="SUBMIT" value=" 전 송 ">
-
-</Form>
 </div>
 
 
