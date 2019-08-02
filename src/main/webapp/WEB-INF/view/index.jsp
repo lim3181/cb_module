@@ -106,7 +106,7 @@ function createNewBucket(){
         error: function(xhr, status, error){
         },
         success : function(data){
-			alert("버켓이 생성되었습니다.");
+			alert("버킷이 생성되었습니다.");
         }
     }); 
 }
@@ -215,7 +215,7 @@ function uploadFile(){
 				<div class="fieldlabel">*패스워드</div>	
 				<div class="formfield">	<input type="password" name="pwdPassword" size="10"/><br /><br /></div>
 				
-				<div class="fieldlabel">*버 켓 명</div>	
+				<div class="fieldlabel">*버 킷 명</div>	
 				<div class="formfield"><input type="text" name="txtBucketName" size="10"/><br /><br /></div>
 				<br />
 				
@@ -235,7 +235,7 @@ function uploadFile(){
 				<div class="fieldlabelto">Connect 타임아웃 </div>			
 				<div class="formfield"><input type="text" name="txtConnectTO" size="10" value=5000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 				
-				<div class="fieldlabelto">DisConnect 타임아웃 </div>		
+				<div class="fieldlabelto">Disconnect 타임아웃 </div>		
 				<div class="formfield"><input type="text" name="txtDisConnectTO" size="10" value=25000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 					
 				<div class="fieldlabelto">Management 타임아웃 </div>		
@@ -263,7 +263,7 @@ function uploadFile(){
 				<div class="formfield">	<input type="radio" name="rdoHttpEnabled" value="true" checked/>true
 										<input type="radio" name="rdoHttpEnabled" value="false"/>false<br /><br /></div>
 										
-				<div class="fieldlabelbs">HTTP 비 암호화 포트 config </div>
+				<div class="fieldlabelbs">HTTP 비암호화 포트 config </div>
 				<div class="formfield"><input type="text" name="txtHttpDirectPort" size="10" value=8091 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 				
 				<div class="fieldlabelbs">HTTP 암호화 포트 config </div>
@@ -353,7 +353,7 @@ function uploadFile(){
 				<div class="fieldlabelrd">*문서 사이즈 </div>	
 				<div class="formfield"><input type="text" id ="docSize" name="docSize" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br /></div>
 				
-   				<div class="fieldlabelrd">*생성 할 문서의 수 </div>
+   				<div class="fieldlabelrd">*생성할 문서의 수 </div>
    				<div class="formfield"><input type="text" name="docCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>건<br /><br /></div>
    				
 				<div class="fieldlabelrd">*문서 종류</div>
@@ -388,10 +388,10 @@ function uploadFile(){
 				
 				<div class="fieldlabel">*패스워드</div>	
 				<div class="formfield">	<input type="password" name="userPassword" size="10"/><br /><br /></div>
-				<div class="fieldlabel">*버켓명</div>	
+				<div class="fieldlabel">*버킷명</div>	
 				<div class="formfield"><input type="text" id ="newBucketName" name="newBucketName" size="10"/><br /><br /></div>
 				
-				<div class="fieldlabel">*버켓타입 </div>	
+				<div class="fieldlabel">*버킷타입 </div>	
 				<div class="formfield">
 					<select name="newBucketType"> <option selected  value="Couchbase">Couchbase</option> <option value="Ephmeral">Ephmeral</option> <option value="Memcached">Memcached</option> </select>
 				<br /><br /></div>
@@ -402,10 +402,10 @@ function uploadFile(){
 				<div class="fieldlabel">*복제본 수</div>
 				<div class="formfield">	
 					<select name="newBucketReplicas"> <option selected  value="1">1</option> <option value="2">2</option> <option value="3">3</option> </select><br /><br />
-				<div class="fieldlabel">*Index 복제여부</div>
+				<div class="fieldlabel">*Index 복제 여부</div>
 				<div class="formfield"><input type="radio" name="indexReplicaEnable" value="true" checked>true
 										<input type="radio" name="indexReplicaEnable" value="false">false<br /><br /></div>	
-				<div class="fieldlabel">*Flush 기능 활성여부</div>
+				<div class="fieldlabel">*Flush 기능 활성 여부</div>
    				<div class="formfield"><input type="radio" name="flushEnable" value="true" checked>true
 										<input type="radio" name="flushEnable" value="false">false<br /><br /></div>	
 				<div align="right">
@@ -447,7 +447,7 @@ N1QL 실행창
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:53%">문서 작업</h1>
-		<h1 >작업 결과창</h1>
+		<h1 >작업 결과 창</h1>
 	</div>
 	<!-- float-frame -->
 	<div class="float-frame" style="height:400px">
@@ -459,11 +459,11 @@ N1QL 실행창
 			<input type="radio" name="sdkJobType" value="write" onclick="jobChange(this)"/> 쓰기
 			<input type="radio" name="sdkJobType" value="delete" onclick="jobChange(this)"/> 삭제<br /><br />  
 			<div id ="docIdTextLine" name="docIdTextLine" style="visibility:hidden;">
-								문서아이디
+								문서 아이디
 			<input id ="sdkJobDocId" name=sdkJobDocId /><br /><br />  
 			</div>  
 	
-			<textarea id="sdkWriInput" name="sdkWriInput" placeholder="쓰기 작업 수행시 json 문서를,  N1QL 작성시 쿼리문을 작성해주세요."  rows="5" cols="33" style="margin: 0px; width: 90%; height: 180px;visibility:hidden; background-color: #eee; "></textarea>
+			<textarea id="sdkWriInput" name="sdkWriInput" placeholder="쓰기 작업 수행 시 json 문서를, N1QL 작성 시 쿼리문을 작성해주세요."  rows="5" cols="33" style="margin: 0px; width: 90%; height: 180px;visibility:hidden; background-color: #eee; "></textarea>
 		</form>
 		<button class="n1qlexcute" onclick="sdkJobExcute();">실행</button>
 			
@@ -484,7 +484,7 @@ N1QL 실행창
 	<div class="float-frame">
 		<div class="float-unit" style="margin-left: 2%; height:80px;">
 		<form id="fileUpload" name="fileUpload" enctype="multipart/form-data">
-			문서아이디 : <input  id ="docId" name="docId" required="required"/><br />	
+			문서 아이디 : <input  id ="docId" name="docId" required="required"/><br />	
 			쓰레드 개수 : <input type="text" name="threadCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />
 			파일 경로 : <input id ="fileName" name="fileName" type=file accept=".csv, .json" required="required">
 		</form>	
