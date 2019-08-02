@@ -37,6 +37,7 @@ h1 {
 	padding: 10px;
 	overflow: hidden;
 	zoom:1;
+	height:550px;
 }
 .float-unit {
 	color: #fff;
@@ -49,7 +50,69 @@ h1 {
 	padding: 15px 0;
 	margin: 0 1px;
 }
+.float-division {
+	background: lightgray;
+	padding: 10px;
+	overflow: hidden;
+	float:left;
+/* 	padding-right:200px; */
+	height:550px;
+	
+}
 .big-area {
+	float: left;
+	width: 300px;
+	margin: 0 10px 0 0;
+	padding: 10px;
+	background: #999;
+	
+}
+.relative {
+	position:relative;
+	top:237px;
+	
+}
+.fieldlabel {
+	float:left;
+	width:150px;
+	padding-left:30px;
+}
+.fieldlabelto {
+	float:left;
+	width:150px;
+	padding-right:20px;
+	padding-left:10px;
+}
+.fieldlabelbs {
+	float:left;
+	width:200px;
+	padding-left:10px;
+}
+.fieldlabelrb {
+	float:left;
+	width:170px;
+	padding-right:10px;
+	padding-left:10px;
+}
+.fieldlabelpm {
+	float:left;
+	width:170px;
+	padding-right:10px;
+	padding-left:10px;
+}
+.fieldlabelad {
+	float:left;
+	width:170px;
+	padding-right:10px;
+	padding-left:10px;
+}
+.fieldlabelrd {
+	float:left;
+	width:120px;
+	padding-right:20px;
+	padding-left:10px;
+}
+.random-big-area {
 	float: left;
 	width: 300px;
 	margin: 0 10px 0 0;
