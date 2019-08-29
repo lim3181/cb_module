@@ -34,68 +34,6 @@ function n1qlExcute(){
 
 }
 
-function sdkJobExcute(){
-    var data = jQuery("#sdkJobsForm").serializeArray();
-
-    $.ajax({
-        type : "post",
-        url : "/sdkJobExcute",
-        data : data,
-        error: function(xhr, status, error){
-        	$('#sdkJobOutput').val("에러가 발생하였습니다. 문서의 ID가 중복 혹은 존재하지 않습니다.")
-        },
-        success : function(data){
-        	
-	        var obj = eval(data);
-			if (obj.status == "success"){
-				$('#sdkJobOutput').val(obj.allRows)
-			    var ugly = document.getElementById('sdkJobOutput').value;
-			    var obj = JSON.parse(ugly);
-			    var pretty = JSON.stringify(obj, undefined, 4);
-			    document.getElementById('sdkJobOutput').value = pretty;
-			}
-			else if (obj.status != null){
-				$('#sdkJobOutput').val(obj.error)
-			} else {
-				$('#sdkJobOutput').val(obj.result)
-			    var ugly = document.getElementById('sdkJobOutput').value;
-			    var obj = JSON.parse(ugly);
-			    var pretty = JSON.stringify(obj, undefined, 4);
-			    document.getElementById('sdkJobOutput').value = pretty;
-			}
-		}
-     });
-}
-
-function test(){
-    var data = jQuery("#fileUpload").serializeArray();
-
-    $.ajax({
-        type : "POST",
-        enctype : "multipart/form-data",
-        url : "/fileUpload",
-        data : data,
-        processData : false,
-        contentType : false,
-        error: function(xhr, status, error){
-        	$('#n1ql').val("해당 문서의 아이디가 없습니다.")
-        },
-        success : function(data){
-	        var obj = eval(data);
-			if (obj.status == "success"){
-	        	alert("SUCCESS");
-				$('#n1ql').val(obj.allRows)
-			}
-			else {
-	        	alert("ETC ERROR");
-				$('#n1ql').val(obj.error)
-			}
-        
-        }
-        
-    });
-}
-
 function createNewBucket(){
     var data = jQuery("#createBucket").serializeArray();
 
@@ -156,7 +94,44 @@ function jobChange(obj){
 		document.getElementById('docIdTextLine').style.visibility = 'visible'
 	}
 }
+
+function sdkJobExcute(){
+    var data = jQuery("#sdkJobsForm").serializeArray();
+
+    $.ajax({
+        type : "post",
+        url : "/sdkJobExcute",
+        data : data,
+        error: function(xhr, status, error){
+        	$('#sdkJobOutput').val("에러가 발생하였습니다. 문서의 ID가 중복 혹은 존재하지 않습니다.")
+        },
+        success : function(data){
+        	
+	        var obj = eval(data);
+			if (obj.status == "success"){
+				$('#sdkJobOutput').val(obj.allRows)
+			    var ugly = document.getElementById('sdkJobOutput').value;
+			    var obj = JSON.parse(ugly);
+			    var pretty = JSON.stringify(obj, undefined, 4);
+			    document.getElementById('sdkJobOutput').value = pretty;
+			}
+			else if (obj.status != null){
+				$('#sdkJobOutput').val(obj.error)
+			} else {
+				$('#sdkJobOutput').val(obj.result)
+			    var ugly = document.getElementById('sdkJobOutput').value;
+			    var obj = JSON.parse(ugly);
+			    var pretty = JSON.stringify(obj, undefined, 4);
+			    document.getElementById('sdkJobOutput').value = pretty;
+			}
+		}
+     });
+}
+
 function uploadFile(){
+
+	
+	
     var data = new FormData(document.getElementById('fileUpload'));
      $.ajax({
         type : "post",
@@ -166,17 +141,27 @@ function uploadFile(){
         processData : false,
         contentType : false,
         error : function(xhr, status, error) {   
-        	$('#uploadOut').val("업로드 처리 오류");
-        	console.log(error);
-        	console.log(error.status);
+        	$('#uploadResult').val("업로드 처리 오류");
         },
-        //어떤 오류 자세하게
 
         success : function(data){
 			var obj = eval(data);
-			alert(obj.status);
-			if (obj.status == "success"){
-				$('#uploadOut').val(obj.allRows)
+			if (obj.suc=="OK"){
+				if(obj.mapFlag=="1") {
+					$('#uploadResult').val(obj.idThreadCheck);
+				}
+				else if(obj.mapFlag=="2") {
+					$('#uploadResult').val(obj.ExtentionsCheck);
+				}
+				else if(obj.mapFlag=="3") {
+					$('#uploadResult').val(obj.csvInsert);
+				}
+				else if(obj.mapFlag=="4") {
+					$('#uploadResult').val(obj.jsonInsert);
+				}
+			}
+			else {
+				$('#uploadResult').val(obj.fileCheck);
 			}
 			
         }
@@ -195,14 +180,14 @@ function uploadFile(){
 
 <!-- 서버 연결 및 환경 구성 -->
 <div class="layout-wrap">
-	<div>
-		<h1 style="float:left; width:70%">&nbsp&nbsp&nbsp&nbsp서버 연결 및 환경 구성</h1>
-		<h1>랜덤 데이터 생성</h1>
-	</div>
 	<div class="float-frame">
 	<form id="conDataForm" name="conDataForm" >
 		<div class="float-division">
-			<div class="big-area" style="height:93%; width:320px" >
+		
+		<div>
+			<h1 align="center"; style="font-weight:bold">서버 연결 및 환경 구성</h1>
+		 </div>
+			<div class="Connection-area" style="height:93%; width:320px" >
 				<div style="margin-left:20px; font-weight:bold">Connection
 				</div><br />
 			
@@ -245,7 +230,7 @@ function uploadFile(){
 			
 	
 			
-			<div class="big-area" style="height:93%; width:320px" >
+			<div class="Connection-area" style="height:93%; width:320px" >
 				<div style="margin-left:20px; font-weight:bold">Bootstrap Option
 				</div><br />
 				
@@ -291,7 +276,7 @@ function uploadFile(){
 			</div>
 			
 			
-			<div class="big-area" style="height:93%; width:320px" >
+			<div class="Connection-area" style="height:93%; width:320px" >
 				<div style="margin-left:20px; font-weight:bold">Reliability option
 				</div><br />
 				
@@ -343,6 +328,9 @@ function uploadFile(){
 		
 	<form id="randomDataForm" name="randomDataForm" >	
 		<div class="float-division" >
+		<div>
+			<h1 align="center"; style="font-weight:bold">랜덤 데이터 생성</h1>
+			</div>
 		
 			<div class="big-area" style="height:93%; width:320px" >
 				<div style="margin-left:20px; font-weight:bold">Create Random Data
@@ -366,7 +354,7 @@ function uploadFile(){
 				<div class="fieldlabelrd">*쓰레드 개수</div>
 				<div class="formfield"><input type="text" name="threadCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />	</div>
 				
-				<div class="relative" align="right">
+				<div class="Rrelative" align="right">
 					<button class="n1qlexcute" onclick="randomData();">실행</button>
 				</div>
 			</div>
@@ -375,8 +363,11 @@ function uploadFile(){
 	</form>
 		
 	<form id="createBucket" name="createBucket" >	
-		<div class="float-division" >
+		<div class="float-division">
 		
+		<div>
+			<h1 align="center"; style="font-weight:bold">버킷 생성</h1>
+		</div>
 			<div class="big-area" style="height:93%; width:320px" >
 				<div style="margin-left:20px; font-weight:bold">createBucket
 				</div><br />
@@ -408,7 +399,7 @@ function uploadFile(){
 				<div class="fieldlabel">*Flush 기능 활성 여부</div>
    				<div class="formfield"><input type="radio" name="flushEnable" value="true" checked>true
 										<input type="radio" name="flushEnable" value="false">false<br /><br /></div>	
-				<div align="right">
+				<div class="Brelative" align="right">
 					<button class="n1qlexcute" onclick="createNewBucket();">저장</button></div>
 			</div>
 			</div>
@@ -445,55 +436,71 @@ N1QL 실행창
 
 <!-- 문서 ID 작업 -->
 <div class="layout-wrap">
-	<div>
-		<h1 style="float:left; width:53%">문서 작업</h1>
-		<h1 >작업 결과 창</h1>
-	</div>
 	<!-- float-frame -->
-	<div class="float-frame" style="height:400px">
-		<div class="float-unit" style="margin-left: 2%; height:400px;">
-		<form id="sdkJobsForm" name="sdkJobsForm">	
-작업 종류 : 	
-			<input type="radio" name="sdkJobType" value="n1ql" onclick="jobChange(this)" /> N1QL
-			<input type="radio" name="sdkJobType" value="read" onclick="jobChange(this)"/> 읽기
-			<input type="radio" name="sdkJobType" value="write" onclick="jobChange(this)"/> 쓰기
-			<input type="radio" name="sdkJobType" value="delete" onclick="jobChange(this)"/> 삭제<br /><br />  
-			<div id ="docIdTextLine" name="docIdTextLine" style="visibility:hidden;">
-								문서 아이디
-			<input id ="sdkJobDocId" name=sdkJobDocId /><br /><br />  
-			</div>  
+	<div class="float-frame" style="height:410px">
 	
+		<div class="float-unit" style="margin-left: 2%; height:400px;">
+			<div>
+				<h1 align="center">문서 작업</h1><br/>
+			</div>
+			<form id="sdkJobsForm" name="sdkJobsForm">	
+			<div style="float:left; padding-left:200px">
+				작업 종류 : 
+				<input type="radio" name="sdkJobType" value="n1ql" onclick="jobChange(this)"/> N1QL
+				<input type="radio" name="sdkJobType" value="read" onclick="jobChange(this)"/> 읽기
+				<input type="radio" name="sdkJobType" value="write" onclick="jobChange(this)"/> 쓰기
+				<input type="radio" name="sdkJobType" value="delete" onclick="jobChange(this)"/> 삭제 
+			</div>
+			<div style="padding-right:35px;text-align:right">
+				<button class="n1qlexcute_sec" onclick="sdkJobExcute();">실행</button>
+		</div>
+		
+		<div id ="docIdTextLine" name="docIdTextLine" style="visibility:hidden;">문서 아이디
+			<input id ="sdkJobDocId" name=sdkJobDocId /><br /><br />  
+		</div>  
 			<textarea id="sdkWriInput" name="sdkWriInput" placeholder="쓰기 작업 수행 시 json 문서를, N1QL 작성 시 쿼리문을 작성해주세요."  rows="5" cols="33" style="margin: 0px; width: 90%; height: 180px;visibility:hidden; background-color: #eee; "></textarea>
-		</form>
-		<button class="n1qlexcute" onclick="sdkJobExcute();">실행</button>
+			</form>
 			
 		</div>
+		
 		<div class="float-unit" style="margin-left: 2%;">
-			<textarea id="sdkJobOutput" name="sdkJobOutput"rows="5" placeholder="작업을 실행해주세요."cols="33" style="margin: 0px; width: 90%; height: 85%; background-color: #eee; " readonly></textarea>
+			<div>
+				<h1 align="center">작업 결과 창</h1><br/>
+			</div>
+				<textarea id="sdkJobOutput" name="sdkJobOutput"rows="5" placeholder="작업을 실행해주세요."cols="33" style="margin: 0px; width: 90%; height: 80%; background-color: #eee; " readonly></textarea>
 		</div>
-		<div class="clear"> </div>
+		<div class="clear"> 
+		</div>
 	</div>
 </div>
 
 
 <!-- Json 및 txt 파일 Upsert -->
 <div class="layout-wrap">
-	<div>
-		<h1 >Json 및 txt 파일 Upsert</h1>
-	</div>
-	<div class="float-frame">
+	<div class="float-frameJson">
 		<div class="float-unit" style="margin-left: 2%; height:80px;">
-		<form id="fileUpload" name="fileUpload" enctype="multipart/form-data">
-			문서 아이디 : <input  id ="docId" name="docId" required="required"/><br />	
-			쓰레드 개수 : <input type="text" name="threadCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />
-			파일 경로 : <input id ="fileName" name="fileName" type=file accept=".csv, .json" required="required">
-		</form>	
-			<button type="submit" class="n1qlexcute" onclick="uploadFile();">파일 Upsert 실행</button>
+			<div>
+				<h1 align="center">Csv 및 Json 파일 Upsert</h1><br/>
+			</div>
+			<div style="float:left; padding-left:200px">
+			<form id="fileUpload" name="fileUpload" enctype="multipart/form-data">
+				문서 아이디 : <input  id ="docId" name="docId" required="required" size="15" /><br />	
+				쓰레드 개수 : <input type="text" name="threadCount" size="13" required="required" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br />
+				파일 경로 : <input id ="fileName" name="fileName" type=file accept=".csv, .json" required="required">
+			</form>
+			</div>
+			<div style="padding-right:35px;padding-top:20px;text-align:right"><button type="submit" class="n1qlexcute" onclick="uploadFile();">실행</button>
+			</div>
+			
+		</div>
 		
-		</div>
 		<div class="float-unit" style="margin-left: 2%; height:80px;">
-			<textarea id="uploadOut" name="uploadOut" rows="2" placeholder="성공 or 실패" cols="33" style="margin: 0px; width: 90%; height: 85%; background-color: #eee; " readonly></textarea>
+			<div>
+				<h1 align="center">작업 결과 창</h1><br/>
+				</div>
+				<textarea id="uploadResult" name="uploadResult" rows="2" placeholder="성공 or 실패" cols="33" style="margin: 0px; width: 90%; height: 85%; background-color: #eee; " readonly></textarea>
 		</div>
+		
 		<div class="clear"> </div>
 	</div>
 </div> 
