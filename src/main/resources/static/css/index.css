@@ -28,7 +28,6 @@ h1 {
 }
 .layout-wrap{
 	margin:10px 10px 20px;
-	border: 1px dashed #666;
 	padding: 10px;
 }
 .float-frame{
@@ -37,7 +36,17 @@ h1 {
 	padding: 10px;
 	overflow: hidden;
 	zoom:1;
-	height:550px;
+	width:97%;
+	height:590px;
+}
+.float-frameJson{
+	background: lightgray;
+	border: 1px solid #ddd;
+	padding: 10px;
+	overflow: hidden;
+	zoom:1;
+	width:97%;
+	height:190px;
 }
 .float-unit {
 	color: #fff;
@@ -55,8 +64,7 @@ h1 {
 	padding: 10px;
 	overflow: hidden;
 	float:left;
-/* 	padding-right:200px; */
-	height:550px;
+	height:560px;
 	
 }
 .big-area {
@@ -64,12 +72,26 @@ h1 {
 	width: 300px;
 	margin: 0 10px 0 0;
 	padding: 10px;
+ 	padding-left:20px; 
 	background: #999;
 	
 }
-.relative {
+.Connection-area {
+	float: left;
+	width: 350x;
+	margin: 0 0 0 0;
+	padding: 10px;
+	background: #999;
+	
+}
+.Rrelative {
 	position:relative;
 	top:237px;
+	
+}
+.Brelative {
+	position:relative;
+	top:96px;
 	
 }
 .fieldlabel {
@@ -141,8 +163,26 @@ h1 {
 	background-color: #4287d6;
 	transition-duration: 0.4s;
 }
+.n1qlexcute_sec{
+	border: none;
+	color: white;
+	padding: 5px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 12px;
+	background-color: #4287d6;
+	transition-duration: 0.4s;
+}
 .n1qlexcute:hover {
   background-color: #555555; /* Green */
   color: white;
+}
+.TitleAlign{
+	 style="float:left
+	
 }
 textarea{resize:none;}
