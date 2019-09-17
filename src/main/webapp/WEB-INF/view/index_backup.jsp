@@ -45,32 +45,70 @@ function sdkJobExcute(){
         	$('#sdkJobOutput').val("에러가 발생하였습니다. 문서의 ID가 중복 혹은 존재하지 않습니다.")
         },
         success : function(data){
+        	
 	        var obj = eval(data);
-			$('#sdkJobOutput').val(obj.result)
+			if (obj.status == "success"){
+				$('#sdkJobOutput').val(obj.allRows)
+			    var ugly = document.getElementById('sdkJobOutput').value;
+			    var obj = JSON.parse(ugly);
+			    var pretty = JSON.stringify(obj, undefined, 4);
+			    document.getElementById('sdkJobOutput').value = pretty;
+			}
+			else if (obj.status != null){
+				$('#sdkJobOutput').val(obj.error)
+			} else {
+				$('#sdkJobOutput').val(obj.result)
+			    var ugly = document.getElementById('sdkJobOutput').value;
+			    var obj = JSON.parse(ugly);
+			    var pretty = JSON.stringify(obj, undefined, 4);
+			    document.getElementById('sdkJobOutput').value = pretty;
+			}
 		}
      });
 }
 
-function uploadFile(){
+function test(){
     var data = jQuery("#fileUpload").serializeArray();
 
     $.ajax({
-        type : "post",
+        type : "POST",
+        enctype : "multipart/form-data",
         url : "/fileUpload",
         data : data,
+        processData : false,
+        contentType : false,
         error: function(xhr, status, error){
-        	$('#sdkJobOutput').val("해당 문서의 아이디가 없습니다.")
+        	$('#n1ql').val("해당 문서의 아이디가 없습니다.")
         },
         success : function(data){
 	        var obj = eval(data);
 			if (obj.status == "success"){
-				$('#sdkJobOutput').val(obj.allRows)
+	        	alert("SUCCESS");
+				$('#n1ql').val(obj.allRows)
 			}
 			else {
-				$('#sdkJobOutput').val(obj.error)
+	        	alert("ETC ERROR");
+				$('#n1ql').val(obj.error)
 			}
+        
         }
+        
     });
+}
+
+function createNewBucket(){
+    var data = jQuery("#createBucket").serializeArray();
+
+     $.ajax({
+        type : "post",
+        url : "/createBucket",
+        data : data,
+        error: function(xhr, status, error){
+        },
+        success : function(data){
+			alert("버킷이 생성되었습니다.");
+        }
+    }); 
 }
 
 function randomData(){
@@ -104,6 +142,49 @@ function connectionData(){
 	
 }
 
+function jobChange(obj){
+	var job = obj.value;
+	if (job == "n1ql"){
+		document.getElementById('sdkWriInput').style.visibility = 'visible'
+		document.getElementById('docIdTextLine').style.visibility = 'hidden'
+	} else if (job == "write") {
+		document.getElementById('sdkWriInput').style.visibility = 'visible'
+		document.getElementById('docIdTextLine').style.visibility = 'visible'	
+	} 
+	else {
+		document.getElementById('sdkWriInput').style.visibility = 'hidden'
+		document.getElementById('docIdTextLine').style.visibility = 'visible'
+	}
+}
+function uploadFile(){
+    var data = new FormData(document.getElementById('fileUpload'));
+     $.ajax({
+        type : "post",
+        url : "/fileUpload",
+        enctype: "multipart/form-data",
+        data : data,
+        processData : false,
+        contentType : false,
+        error : function(xhr, status, error) {   
+        	$('#uploadOut').val("업로드 처리 오류");
+        	console.log(error);
+        	console.log(error.status);
+        },
+        //어떤 오류 자세하게
+
+        success : function(data){
+			var obj = eval(data);
+			alert(obj.status);
+			if (obj.status == "success"){
+				$('#uploadOut').val(obj.allRows)
+			}
+			
+        }
+        
+    }); 
+}
+
+
 </script>
 <body>
 <div id="header">
@@ -112,13 +193,20 @@ function connectionData(){
     </a>
 </div>
 
+<!-- 서버 연결 및 환경 구성 -->
 <div class="layout-wrap">
-	<h1>서버 연결 및 환경 구성</h1>
+	<div>
+		<h1 style="float:left; width:70%">&nbsp&nbsp&nbsp&nbsp서버 연결 및 환경 구성</h1>
+		<h1>랜덤 데이터 생성</h1>
+		<h1>버킷 생성</h1>
+	</div>
 	<div class="float-frame">
 	<form id="conDataForm" name="conDataForm" >
-		<div class="big-area" style="height:95%; width:320px" >
-			<div style="margin-left:20px; font-weight:bold">Connection
-			</div><br />
+		<div class="float-division">
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">Connection
+				</div><br />
+			
 				<div class="fieldlabel">*호스트명</div>	
 				<div class="formfield"><input type="text" name="txtHostName" size="10"/><br /><br /></div>
 				
@@ -128,13 +216,14 @@ function connectionData(){
 				<div class="fieldlabel">*패스워드</div>	
 				<div class="formfield">	<input type="password" name="pwdPassword" size="10"/><br /><br /></div>
 				
-				<div class="fieldlabel">*버 켓 명</div>	
+				<div class="fieldlabel">*버 킷 명</div>	
 				<div class="formfield"><input type="text" name="txtBucketName" size="10"/><br /><br /></div>
 				<br />
 				
 				
-			<div style="margin-left:20px; font-weight:bold">Time Out Option
-			</div><br />
+				<div style="margin-left:20px; font-weight:bold"></br>Time Out Option
+				</div><br />
+				
 				<div class="fieldlabelto">Key-Value 타임아웃 </div>		
 				<div class="formfield"><input type="text" name="txtKeyValueTO" size="10" value=2500 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 				
@@ -147,19 +236,20 @@ function connectionData(){
 				<div class="fieldlabelto">Connect 타임아웃 </div>			
 				<div class="formfield"><input type="text" name="txtConnectTO" size="10" value=5000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 				
-				<div class="fieldlabelto">DisConnect 타임아웃 </div>		
+				<div class="fieldlabelto">Disconnect 타임아웃 </div>		
 				<div class="formfield"><input type="text" name="txtDisConnectTO" size="10" value=25000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
-				
+					
 				<div class="fieldlabelto">Management 타임아웃 </div>		
 				<div class="formfield"><input type="text" name="txtManagementTO" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
-		
-		</div>
-		
-
-		
-		<div class="big-area" style="height:95%; width:320px" >
-			<div style="margin-left:20px; font-weight:bold">Bootstrap Option
-			</div><br />
+			
+			</div>
+			
+	
+			
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">Bootstrap Option
+				</div><br />
+				
 				<div class="fieldlabelbs">암호화 사용</div>
 				<div class="formfield">	<input type="radio" name="rdoSslEnable" value="true"/>true 
 										<input type="radio" name="rdoSslEnable" value="false" checked/>false<br /><br /></div>
@@ -174,7 +264,7 @@ function connectionData(){
 				<div class="formfield">	<input type="radio" name="rdoHttpEnabled" value="true" checked/>true
 										<input type="radio" name="rdoHttpEnabled" value="false"/>false<br /><br /></div>
 										
-				<div class="fieldlabelbs">HTTP 비 암호화 포트 config </div>
+				<div class="fieldlabelbs">HTTP 비암호화 포트 config </div>
 				<div class="formfield"><input type="text" name="txtHttpDirectPort" size="10" value=8091 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 				
 				<div class="fieldlabelbs">HTTP 암호화 포트 config </div>
@@ -199,25 +289,24 @@ function connectionData(){
 										<input type="radio" name="rdoMutationTknEnable" value="false" checked/>false<br /><br /></div>
 										
 										<br /><br />    
-		</div>
-		
-		
-		<div class="big-area" style="height:95%; width:320px" >
-			<div style="margin-left:20px; font-weight:bold">Reliability option
-			</div><br />
+			</div>
 			
+			
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">Reliability option
+				</div><br />
+				
 				<div class="fieldlabelrb">최대 요청 Lifetime</div>
 				<div class="formfield"><input type="text" name="txtMaxReqLifeTime" size="10" value=75000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 				
 				<div class="fieldlabelrb">소켓 유지 시간</div>	
 				<div class="formfield"><input type="text" name="txtKeepAliveInterval" size="10" value=30000 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 				
-  
-			
-			
-			<br />
-			<div style="margin-left:20px; font-weight:bold">Performance option
-			</div><br />
+	 	
+				<br />
+				<div style="margin-left:20px; font-weight:bold">Performance option
+				</div><br />
+				
 				<div class="fieldlabelpm">노드당 key/value Endpoint</div>	
 				<div class="formfield"><input type="text" name="txtKvEndpoints" size="10" value=1 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 				
@@ -230,12 +319,12 @@ function connectionData(){
 				<div class="fieldlabelpm">TCP Nodelay</div> 	
 				<div class="formfield">	<input type="radio" name="rdoTcpNodelayEnable" value="true" checked/>true
 										<input type="radio" name="rdoTcpNodelayEnable" value="false"/>false<br /><br /></div>
+			
+			
+				<br />
+				<div style="margin-left:20px; font-weight:bold">Advanced option
+				</div><br />
 				
-			
-			
-			<br />
-			<div style="margin-left:20px; font-weight:bold">Advanced option
-			</div><br />
 				<div class="fieldlabelad">Ring 버퍼 사이즈 요청 </div>	
 				<div class="formfield"><input type="text" name="txtRequestBufferSize" size="10" value=16384 onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br /><br /></div>
 					
@@ -246,49 +335,100 @@ function connectionData(){
 				<div class="formfield">	<input type="radio" name="rdoBufferPoolEnab" value="true" checked>true
 										<input type="radio" name="rdoBufferPoolEnab" value="false">false<br /><br /></div>	
 			
-		<div align="right">
-			<button class="n1qlexcute" onclick="connectionData();">저장</button></div>
-		</div>
-		</form>
-		
-	</div>
-	<!-- //float-frame -->
-</div>
-
-<div class="layout-wrap">
-
-	<h1>랜덤 데이터 생성</h1>
-	<div class="float-frame">
-		<form id="randomDataForm" name="randomDataForm" >
-		<div class="big-area" >
-			<div class="fieldlabelrd">아이디 사이즈 </div>	
-			<div class="formfield"><input type="text" id ="docIdSize" name="docIdSize" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br /></div>
-			<div class="fieldlabelrd">문서 사이즈 </div>	
-			<div class="formfield"><input type="text" id ="docSize" name="docSize" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br /></div>
-    		<div class="fieldlabelrd">생성 할 문서의 수 </div>
-    		<div class="formfield"><input type="text" name="docCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>건<br /><br /></div>
-			<div class="fieldlabelrd">문서 종류</div>
-			<div class="formfield"><input type="radio" name="docType" value="Json" /> json
-								<input type="radio" name="docType" value="Binary" /> binary<br /><br />    </div>
-<!-- 	작업 반복 여부 : <input type="radio" name="loop" value="Ture" /> true
-			<input type="radio" name="loop" value="False" /> false<br /><br /> -->
-			<div class="fieldlabelrd">쓰레드 개수</div>
-			<div class="formfield"><input type="text" name="threadCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />	</div>
-			<div align="right">
-				<button class="n1qlexcute" onclick="randomData();">실행</button>
+				<div align="right">
+					<button class="n1qlexcute" onclick="connectionData();">저장</button></div>
 			</div>
 		</div>
-		</form>
+	</form>
+		
+		
+	<form id="randomDataForm" name="randomDataForm" >	
+		<div class="float-division" >
+		
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">Create Random Data
+				</div><br />
+				<div class="fieldlabelrd">*아이디 사이즈 </div>	
+				<div class="formfield"><input type="text" id ="docIdSize" name="docIdSize" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br /></div>
+				
+				<div class="fieldlabelrd">*문서 사이즈 </div>	
+				<div class="formfield"><input type="text" id ="docSize" name="docSize" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>byte<br /><br /></div>
+				
+   				<div class="fieldlabelrd">*생성할 문서의 수 </div>
+   				<div class="formfield"><input type="text" name="docCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>건<br /><br /></div>
+   				
+				<div class="fieldlabelrd">*문서 종류</div>
+				<div class="formfield">	<input type="radio" name="docType" value="Json" /> json
+										<input type="radio" name="docType" value="Binary" /> binary<br /><br />    </div>
+									
+				<!--작업 반복 여부 : 	<input type="radio" name="loop" value="Ture" /> true
+										<input type="radio" name="loop" value="False" /> false<br /><br /> -->
+										
+				<div class="fieldlabelrd">*쓰레드 개수</div>
+				<div class="formfield"><input type="text" name="threadCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />	</div>
+				
+				<div class="relative" align="right">
+					<button class="n1qlexcute" onclick="randomData();">실행</button>
+				</div>
+			</div>
+		</div>
+	
+	</form>
+		
+	<form id="createBucket" name="createBucket" >	
+		<div class="float-division" >
+		
+			<div class="big-area" style="height:93%; width:320px" >
+				<div style="margin-left:20px; font-weight:bold">createBucket
+				</div><br />
+				<div class="fieldlabel">*호스트명</div>	
+				<div class="formfield"><input type="text" name="hostName" size="10"/><br /><br /></div>
+				
+				<div class="fieldlabel">*유 저 명</div>	
+				<div class="formfield"><input type="text" name="userName" size="10"/><br /><br /></div>
+				
+				<div class="fieldlabel">*패스워드</div>	
+				<div class="formfield">	<input type="password" name="userPassword" size="10"/><br /><br /></div>
+				<div class="fieldlabel">*버킷명</div>	
+				<div class="formfield"><input type="text" id ="newBucketName" name="newBucketName" size="10"/><br /><br /></div>
+				
+				<div class="fieldlabel">*버킷타입 </div>	
+				<div class="formfield">
+					<select name="newBucketType"> <option selected  value="Couchbase">Couchbase</option> <option value="Ephmeral">Ephmeral</option> <option value="Memcached">Memcached</option> </select>
+				<br /><br /></div>
+				
+   				<div class="fieldlabel">*메모리 할당</div>
+   				<div class="formfield"><input type="text" name="bucketMemory" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>MB<br /><br /></div>
+   				
+				<div class="fieldlabel">*복제본 수</div>
+				<div class="formfield">	
+					<select name="newBucketReplicas"> <option selected  value="1">1</option> <option value="2">2</option> <option value="3">3</option> </select><br /><br />
+				<div class="fieldlabel">*Index 복제 여부</div>
+				<div class="formfield"><input type="radio" name="indexReplicaEnable" value="true" checked>true
+										<input type="radio" name="indexReplicaEnable" value="false">false<br /><br /></div>	
+				<div class="fieldlabel">*Flush 기능 활성 여부</div>
+   				<div class="formfield"><input type="radio" name="flushEnable" value="true" checked>true
+										<input type="radio" name="flushEnable" value="false">false<br /><br /></div>	
+				<div align="right">
+					<button class="n1qlexcute" onclick="createNewBucket();">저장</button></div>
+			</div>
+			</div>
+		</div>
+	
+	</form>	
+		
 	</div>
-	</div>
+<!-- //float-frame -->
+</div>
 
-<!-- //layout-wrap -->
+<!--  
+<div class="layout-wrap">
+N1QL 실행창
 <div class="layout-wrap">
 	<div>
 		<h1 style="float:left; width:53%">N1QL 실행창</h1>
 		<h1 >N1QL 결과창</h1>
 	</div>
-	<!-- float-frame -->
 	<div class="float-frame">
 		<div class="float-unit" style="margin-left: 2%;">	
 			<form id="n1qlForm" name="n1qlForm">		
@@ -302,25 +442,29 @@ function connectionData(){
 		</div>
 		<div class="clear"> </div>
 	</div>
-	<!-- //float-frame -->
-</div>
+</div> -->
 
-<!-- //layout-wrap -->
+<!-- 문서 ID 작업 -->
 <div class="layout-wrap">
 	<div>
-		<h1 style="float:left; width:53%">문서 ID 작업</h1>
-		<h1 >작업 결과창</h1>
+		<h1 style="float:left; width:53%">문서 작업</h1>
+		<h1 >작업 결과 창</h1>
 	</div>
 	<!-- float-frame -->
-	<div class="float-frame">
+	<div class="float-frame" style="height:400px">
 		<div class="float-unit" style="margin-left: 2%; height:400px;">
 		<form id="sdkJobsForm" name="sdkJobsForm">	
-		문서아이디
-			<input id ="sdkJobDocId" name=sdkJobDocId /><br /><br />  		
-작업 종류 : 	<input type="radio" name="sdkJobType" value="read" /> 읽기
-			<input type="radio" name="sdkJobType" value="write" /> 쓰기
-			<input type="radio" name="sdkJobType" value="delete" /> 삭제<br /><br />    
-			<textarea id="sdkWriInput" name="sdkWriInput"  placeholder="쓰기 작업 수행시 문서 내용을 작성해주세요."  rows="5" cols="33" style="margin: 0px; width: 90%; height: 55%; background-color: #eee; "></textarea>
+작업 종류 : 	
+			<input type="radio" name="sdkJobType" value="n1ql" onclick="jobChange(this)" /> N1QL
+			<input type="radio" name="sdkJobType" value="read" onclick="jobChange(this)"/> 읽기
+			<input type="radio" name="sdkJobType" value="write" onclick="jobChange(this)"/> 쓰기
+			<input type="radio" name="sdkJobType" value="delete" onclick="jobChange(this)"/> 삭제<br /><br />  
+			<div id ="docIdTextLine" name="docIdTextLine" style="visibility:hidden;">
+								문서 아이디
+			<input id ="sdkJobDocId" name=sdkJobDocId /><br /><br />  
+			</div>  
+	
+			<textarea id="sdkWriInput" name="sdkWriInput" placeholder="쓰기 작업 수행 시 json 문서를, N1QL 작성 시 쿼리문을 작성해주세요."  rows="5" cols="33" style="margin: 0px; width: 90%; height: 180px;visibility:hidden; background-color: #eee; "></textarea>
 		</form>
 		<button class="n1qlexcute" onclick="sdkJobExcute();">실행</button>
 			
@@ -330,29 +474,29 @@ function connectionData(){
 		</div>
 		<div class="clear"> </div>
 	</div>
-	<!-- //float-frame -->
 </div>
 
-<!-- <div class="layout-wrap">
+
+<!-- Json 및 txt 파일 Upsert -->
+<div class="layout-wrap">
 	<div>
 		<h1 >Json 및 txt 파일 Upsert</h1>
 	</div>
-	float-frame
 	<div class="float-frame">
 		<div class="float-unit" style="margin-left: 2%; height:80px;">
-		<form id="fileUpload" name="fileUpload">
-			문서아이디 : <input  id ="docId" name="docId" />			
-			파일 경로 : <input id ="fileName" name="fileName" style="margin-left: 10%;"/>
+		<form id="fileUpload" name="fileUpload" enctype="multipart/form-data">
+			문서 아이디 : <input  id ="docId" name="docId" required="required"/><br />	
+			쓰레드 개수 : <input type="text" name="threadCount" size="10" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>개<br /><br />
+			파일 경로 : <input id ="fileName" name="fileName" type=file accept=".csv, .json" required="required">
 		</form>	
-			<button class="n1qlexcute" onclick="uploadFile();">파일 Upsert 실행</button>
+			<button type="submit" class="n1qlexcute" onclick="uploadFile();">파일 Upsert 실행</button>
 		
 		</div>
 		<div class="float-unit" style="margin-left: 2%; height:80px;">
-			<textarea id="n1ql" name="n1ql" rows="2" cols="33" style="margin: 0px; width: 90%; height: 85%; background-color: #eee; " readonly>성공 or 실패</textarea>
+			<textarea id="uploadOut" name="uploadOut" rows="2" placeholder="성공 or 실패" cols="33" style="margin: 0px; width: 90%; height: 85%; background-color: #eee; " readonly></textarea>
 		</div>
 		<div class="clear"> </div>
 	</div>
-	//float-frame
-</div> -->
+</div> 
 </body>
 </html>

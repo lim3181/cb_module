@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -96,6 +97,8 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 		File file = new File(strLocalPath);				// 로컬 경로 파일
 		String strFilePath = "";						// 파일 경로 + 파일명
 		String docID = mRequest.getParameter("docId");	// docID
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		if (!file.isDirectory()) { 			// 파일 디렉토리 확인 및 디렉토리 생성
 			file.mkdir();
@@ -107,25 +110,47 @@ public class CouchbaseServiceImpl implements CouchbaseService {
 
 		int intSubstrDot = strOriginFileName.lastIndexOf("."); 					// 파일 확장자
 		String strExtention = strOriginFileName.substring(intSubstrDot + 1); 	// 파일 확장자
-
-		int threadCnt = Integer.parseInt(mRequest.getParameter("threadCount"));	 // thread Count
 		
-		multipartFile.transferTo(new File(strFilePath));		//FilePath에 파일 생성
-
-
-		if (strExtention.equals("csv")) {					//파일 확장자가 csv일 경우
-			CSVtoJSON csvToJson = new CSVtoJSON(bucket, multipartFile, strFilePath, docID, threadCnt, strExtention);
-			csvToJson.CSVtoJSON();
-			
-		} else if (strExtention.equals("json")) {			//파일 확장자가 json일 경우
-			CSVtoJSON csvToJson = new CSVtoJSON(bucket, multipartFile, strFilePath, docID, threadCnt, strExtention);
-			csvToJson.jsonUpload();
-			
-		} else {										//파일 확장자가 csv, json이 아닌 다른 것일 경우
-			System.out.println(strOriginFileName);
+		String strThreadCount = mRequest.getParameter("threadCount");
+		int threadCnt = 0;
+		if(!"".equals(strThreadCount)) {
+			threadCnt = Integer.parseInt(strThreadCount);	 // thread Count
 		}
 
-		return null;
+		if(!multipartFile.isEmpty()) {			//파일이 선택됐을 경우
+			multipartFile.transferTo(new File(strFilePath));		//FilePath에 파일 생성
+			resultMap.put("suc","OK");
+
+			if(StringUtils.isNotBlank(docID) && threadCnt>0) {			//문서 아이디가 공백이 아니며, 쓰레드 개수가 0 이상일 때
+				if (strExtention.equals("csv")) {					//파일 확장자가 csv일 경우
+					CSVtoJSON csvToJson = new CSVtoJSON(bucket, multipartFile, strFilePath, docID, threadCnt, strExtention);
+					csvToJson.CSVtoJSON();
+					resultMap.put("mapFlag","3");
+					resultMap.put("csvInsert","csv 파일 \""+strOriginFileName+"\"가 insert 되었습니다.");
+			
+				} else if (strExtention.equals("json")) {			//파일 확장자가 json일 경우
+					CSVtoJSON csvToJson = new CSVtoJSON(bucket, multipartFile, strFilePath, docID, threadCnt, strExtention);
+					csvToJson.jsonUpload();
+					resultMap.put("mapFlag","4");
+					resultMap.put("jsonInsert","json 파일 \""+strOriginFileName+"\"이 insert 되었습니다.");
+					
+				} else {										//파일 확장자가 csv, json이 아닌 다른 것일 경우
+					System.out.println(strOriginFileName);
+					resultMap.put("mapFlag","2");
+					resultMap.put("ExtentionsCheck","확장자가 csv 및 json인 파일을 선택해주세요.");
+				}
+			}
+			else {
+				resultMap.put("mapFlag","1");
+				resultMap.put("idThreadCheck","문서 아이디와 쓰레드 개수에 빈칸 없이 입력해주세요.");
+				System.out.println("docID or threadCnt is Null");
+			}
+		}else {
+			resultMap.put("fileCheck","파일을 선택해주세요");
+			System.out.println("File is not Selected");
+		}
+
+		return resultMap;
 
 	}
 
